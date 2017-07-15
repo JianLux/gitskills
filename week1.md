@@ -1,5 +1,34 @@
 # 我了解（查到）的this_(:зゝ∠)_
 
+想要知道函数在执行过程中是如何绑定this的，首先要知道函数的调用位置。
+```
+function baz() {  
+    //当前调用栈：baz  
+   //调用位置是全局作用域  
+    console.log("baz");  
+    bar();//bar的调用位置  
+}  
+function bar() {  
+    //当前调用栈：baz -> bar  
+   //调用位置是baz中  
+    console.log("bar");  
+    foo();//foo的调用位置  
+}  
+function foo() {  
+    //当前调用栈：baz -> bar -> foo  
+   //调用位置是bar中  
+    console.log("foo");  
+}  
+baz();//baz的调用位置  
+```
+执行foo函数是的调用栈为baz -> bar -> foo 。
+
+通过函数的互相调用找出调用栈，便可以找出函数的真正调用位置:
+![imamge](http://images.cnitblog.com/blog2015/628067/201505/101951434546534.png)
+上图右侧向上的箭头所滑过的就是foo函数执行的调用栈，栈中的第二个元素就是真正的调用位置。
+
+### this的绑定符合的绑定规则：
+
 #### 1.隐式绑定： 
 
 看调用位置是否有上下文对象，即是否被某个对象拥有或包含（这里说的包含可不是用花括号包起来呦）。
@@ -62,3 +91,30 @@ var a = 2;
 foo();  
 ```
  上面这段代码foo函数不带任何修饰的直接使用，不符合1-3中的任何一种绑定规则，所以只能使用默认绑定规则，而默认绑定规则就是在非严格模式下被绑定在全局对象上（严格模式下与foo函数的调用位置无关为undefined）。
+
+思考：
+//第一种写法
+```
+var a = 3;  
+function foo() {  
+    console.log(this.a);  
+}  
+var obj = {  
+    a: 2,  
+    foo: foo  
+};  
+var bar = obj.foo;  
+bar();  
+```
+//第二种写法
+```
+var a = 3;  
+function foo() {  
+    console.log(this.a);  
+}  
+var obj = {  
+    a: 2,  
+    foo: foo  
+};  
+obj.foo(); 
+```
