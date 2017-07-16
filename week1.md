@@ -92,6 +92,7 @@ foo();
 ```
  上面这段代码foo函数不带任何修饰的直接使用，不符合1-3中的任何一种绑定规则，所以只能使用默认绑定规则，而默认绑定规则就是在非严格模式下被绑定在全局对象上（严格模式下与foo函数的调用位置无关为undefined）。
 
+#### 隐式绑定丢失上下文
 思考：
 //第一种写法
 ```
@@ -118,3 +119,38 @@ var obj = {
 };  
 obj.foo(); 
 ```
+
+由于在 javascript 中，函数是对象，对象之间是引用传递，而不是值传递。因此， bar = obj.foo = say ，也就是bar = foo ，obj.foo 只是起了一个桥梁的作用，bar 最终引用的是 foo 函数的地址，而与 obj 这个对象无关了。这就是所谓的”丢失上下文“。最终执行 bar 函数，只不过简单的执行了foo函数，输出3。
+
+#### 箭头函数的绑定
+箭头函数的this是根据外层的（函数或者全局）作用域来决定的。函数体内的this对象指的是定义时所在的对象，而不是之前介绍的调用时绑定的对象。
+```
+// 定义一个构造函数
+function Person(name,age) {
+	this.name = name
+	this.age = age 
+	this.speak = function (){
+		console.log(this.name)
+		// 普通函数（非箭头函数),this绑定在调用时的作用域
+	}
+	this.bornYear = () => {
+		// 本文写于2016年，因此new Date().getFullYear()得到的是2016
+		// 箭头函数，this绑定在实例内部
+		console.log(new Date().getFullYear() - this.age)
+		}
+	}
+}
+var zxt = new Person("zxt",22)
+zxt.speak() // "zxt"
+zxt.bornYear() // 1994
+// 到这里应该大家应该都没什么问题
+var xiaoMing = {
+	name: "xiaoming",
+	age: 18  // 小明永远18岁
+}
+zxt.speak.call(xiaoMing)
+// "xiaoming" this绑定的是xiaoMing这个对象
+zxt.bornYear.call(xiaoMing)
+// 1994 而不是 1998,这是因为this永远绑定的是zxt这个实例
+```
+箭头函数的 this 强制性的绑定在了箭头函数定义时所在的作用域，而且无法通过显示绑定，如apply,call方法来修改。
