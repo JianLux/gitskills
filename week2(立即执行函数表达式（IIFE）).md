@@ -106,7 +106,7 @@ new function () { /* code */ } () // 如果需要传递参数，只需要加上�
 // 这个代码变量i从来就没被locked住
 // 相反，当循环执行以后，我们在点击的时候i才获得数值
 // 因为这个时候i才真正获得值
-// 所以说无论点击那个连接，最终显示的都是I am button #5（如果有10个a元素的话）
+// 所以说无论点击那个连接，最终显示的都是I am button #5（如果有5个input元素的话）
 
 
 var elems = document.getElementsByTagName('a');
