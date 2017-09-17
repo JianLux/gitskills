@@ -116,7 +116,7 @@ for (var i = 0; i < elems.length; i++) {
     elems[i].addEventListener('click', function (e) {
         e.preventDefault();
         alert('I am link #' + i);
-    }, 'false');
+    }, false);
 
 }
 
@@ -134,7 +134,7 @@ for (var i = 0; i < elems.length; i++) {
         elems[i].addEventListener('click', function (e) {
             e.preventDefault();
             alert('I am link #' + lockedInIndex);
-        }, 'false');
+        }, false);
 
     })(i);
 
@@ -153,7 +153,7 @@ for (var i = 0; i < elems.length; i++) {
             e.preventDefault();
             alert('I am link #' + lockedInIndex);
         };
-    })(i), 'false');
+    })(i), false);
 
 }
 ```
